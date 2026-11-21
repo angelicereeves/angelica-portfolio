@@ -23,9 +23,12 @@ export default function AboutPreview() {
           }}
           className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20"
         >
-          {/* LEFT — HEADING */}
+          {/* ==========================================
+              LEFT — HEADING
+          ========================================== */}
 
           <div>
+            {/* SECTION LABEL */}
             <div className="mb-7 flex items-center gap-3">
               <Asterisk size={18} className="text-pink" />
 
@@ -34,6 +37,7 @@ export default function AboutPreview() {
               </span>
             </div>
 
+            {/* HEADING */}
             <h2 className="font-display text-[clamp(3.5rem,7vw,7rem)] leading-[0.95] font-bold tracking-[-0.07em]">
               MORE
               <br />
@@ -43,25 +47,38 @@ export default function AboutPreview() {
               </span>
             </h2>
 
+            {/* LOCATION */}
             <div className="mt-8 flex items-center gap-2 text-sm text-white/40">
-              <MapPin size={15} className="text-pink" />
-              Based in Sarandë, Albania
+              <MapPin
+                size={15}
+                className="shrink-0 text-pink"
+              />
+
+              <span>
+                US Citizen - Based in Sarandë, Albania
+              </span>
             </div>
           </div>
 
-          {/* RIGHT — INTRODUCTION */}
+          {/* ==========================================
+              RIGHT — INTRODUCTION
+          ========================================== */}
 
           <div className="relative">
-            {/* Decorative accent */}
-
+            {/* DECORATIVE ACCENT */}
             <div
               aria-hidden="true"
               className="absolute -top-8 -left-8 hidden h-24 w-24 rounded-full border border-violet/20 lg:block"
             />
 
             <div className="relative border-l-2 border-cyan/40 pl-7 md:pl-10">
+              {/* INTRODUCTION WITH NEON NAME */}
               <p className="font-display text-2xl leading-[1.5] font-medium tracking-tight md:text-3xl">
-                Hi, I&apos;m Angelica.
+                Hi, I&apos;m{" "}
+                <span className="text-[#A855F7] [text-shadow:0_0_18px_#A855F744]">
+                  Angelica.
+                </span>
+
                 <span className="text-white/55">
                   {" "}
                   I build websites, applications, and digital experiences
@@ -69,6 +86,7 @@ export default function AboutPreview() {
                 </span>
               </p>
 
+              {/* DESCRIPTION */}
               <p className="mt-6 max-w-xl text-base leading-[1.9] text-white/50">
                 I&apos;m a full-stack developer with a creative streak and
                 an inconvenient amount of curiosity. I love turning
@@ -82,11 +100,13 @@ export default function AboutPreview() {
                 because I thought, &quot;I could make that better.&quot;
               </p>
 
-              {/* CTA */}
+              {/* ==========================================
+                  CTA — NEON LIME HOVER
+              ========================================== */}
 
               <Link
                 href="/about"
-                className="group mt-10 inline-flex items-center gap-4 rounded-full border border-white/20 px-7 py-4 font-display text-sm font-semibold tracking-wide transition-colors hover:border-cyan hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan"
+                className="group mt-10 inline-flex items-center gap-4 rounded-full border border-white/20 px-7 py-4 font-display text-sm font-semibold tracking-wide transition-all duration-300 hover:border-[#B6FF3B] hover:text-[#B6FF3B] hover:shadow-[0_0_20px_#B6FF3B55] focus-visible:border-[#B6FF3B] focus-visible:text-[#B6FF3B] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B6FF3B]"
               >
                 MORE ABOUT ME
 

@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, Code2, Sparkles } from "lucide-react";
+import { ArrowUpRight, Code2 } from "lucide-react";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import type { Project } from "@/data/projects";
 
 interface ProjectCardProps {
@@ -34,31 +35,41 @@ export default function ProjectCard({
       style={
         {
           "--project-accent": project.accent,
-        } as React.CSSProperties
+          "--project-border": `color-mix(in srgb, ${project.accent} 25%, transparent)`,
+          "--project-glow": `color-mix(in srgb, ${project.accent} 18%, transparent)`,
+        } as CSSProperties
       }
     >
+      {/* ==========================================
+          PROJECT CARD
+      ========================================== */}
+
       <Link
         href={`/work/${project.slug}`}
-        className="relative block h-full overflow-hidden rounded-[28px] border border-white/10 bg-surface transition-colors duration-500 hover:border-[var(--project-accent)] focus-visible:border-[var(--project-accent)]"
+        className="relative block h-full overflow-hidden rounded-[28px] border border-[var(--project-border)] bg-surface transition-[border-color,box-shadow] duration-500 hover:border-[var(--project-accent)] hover:shadow-[0_0_22px_var(--project-glow)] focus-visible:border-[var(--project-accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--project-accent)]"
       >
-        {/* Neon glow */}
+        {/* INNER NEON GLOW */}
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-20 opacity-0 blur-[100px] transition-opacity duration-700 group-hover:opacity-20"
+          className="pointer-events-none absolute -inset-20 opacity-[0.06] blur-[100px] transition-opacity duration-700 group-hover:opacity-20"
           style={{
             background: project.accent,
           }}
         />
 
-        {/* Image / Preview Area */}
+        {/* ==========================================
+            IMAGE / PREVIEW AREA
+        ========================================== */}
 
         <div
           className={`relative flex items-center justify-center overflow-hidden border-b border-white/10 bg-[#0B0B10] ${
-            isLarge ? "aspect-[16/9]" : "aspect-[4/5] md:aspect-auto md:h-[420px]"
+            isLarge
+              ? "aspect-[16/9]"
+              : "aspect-[4/5] md:aspect-auto md:h-[420px]"
           }`}
         >
-          {/* Background grid */}
+          {/* BACKGROUND GRID */}
 
           <div
             aria-hidden="true"
@@ -72,7 +83,9 @@ export default function ProjectCard({
             }}
           />
 
-          {/* Placeholder artwork */}
+          {/* ==================================
+              PLACEHOLDER ARTWORK
+          ================================== */}
 
           <div className="relative z-10 flex flex-col items-center gap-6 text-center transition-transform duration-700 group-hover:scale-105">
             <div
@@ -102,7 +115,9 @@ export default function ProjectCard({
             </div>
           </div>
 
-          {/* Scratch-inspired neon streaks */}
+          {/* ==================================
+              SCRATCH-INSPIRED NEON STREAKS
+          ================================== */}
 
           <svg
             aria-hidden="true"
@@ -130,7 +145,9 @@ export default function ProjectCard({
             />
           </svg>
 
-          {/* Top labels */}
+          {/* ==================================
+              TOP LABELS
+          ================================== */}
 
           <div className="absolute top-6 left-6 z-20 flex items-center gap-2">
             <span className="rounded-full border border-white/15 bg-black/60 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white/70 uppercase backdrop-blur-md">
@@ -144,43 +161,45 @@ export default function ProjectCard({
             )}
           </div>
 
-          {/* Arrow */}
+          {/* ==================================
+              ARROW
+          ================================== */}
 
-          <div
-            className="absolute top-6 right-6 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/60 text-white backdrop-blur-md transition-all duration-300 group-hover:rotate-45 group-hover:bg-white group-hover:text-black"
-          >
+          <div className="absolute top-6 right-6 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/60 text-white backdrop-blur-md transition-all duration-300 group-hover:rotate-45 group-hover:bg-white group-hover:text-black">
             <ArrowUpRight size={20} />
           </div>
 
-          {/* Bottom gradient */}
+          {/* BOTTOM GRADIENT */}
 
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/50 to-transparent" />
         </div>
 
-        {/* Project Info */}
+        {/* ==========================================
+            PROJECT INFORMATION
+        ========================================== */}
 
         <div className="relative z-10 p-7 md:p-9">
-          <div className="mb-4 flex items-start justify-between gap-4">
-            <div>
-              <p className="mb-2 font-mono text-xs tracking-widest text-white/40 uppercase">
-                {project.subtitle}
-              </p>
+          {/* PROJECT SUBTITLE & TITLE */}
 
-              <h3 className="font-display text-2xl font-bold tracking-tight md:text-3xl">
-                {project.title}
-              </h3>
-            </div>
+          <div className="mb-4">
+            <p className="mb-2 font-mono text-xs tracking-widest text-white/40 uppercase">
+              {project.subtitle}
+            </p>
 
-            <span className="font-mono text-xs text-white/30">
-              {project.year}
-            </span>
+            <h3 className="font-display text-2xl font-bold tracking-tight md:text-3xl">
+              {project.title}
+            </h3>
           </div>
+
+          {/* PROJECT DESCRIPTION */}
 
           <p className="mb-6 max-w-xl text-sm leading-relaxed text-white/55 md:text-base">
             {project.description}
           </p>
 
-          {/* Technology tags */}
+          {/* ==================================
+              TECHNOLOGY TAGS
+          ================================== */}
 
           <div className="flex flex-wrap gap-2">
             {project.technologies.slice(0, 4).map((tech) => (
@@ -200,9 +219,12 @@ export default function ProjectCard({
           </div>
         </div>
 
-        {/* Bottom accent line */}
+        {/* ==========================================
+            BOTTOM ACCENT LINE
+        ========================================== */}
 
         <div
+          aria-hidden="true"
           className="absolute right-0 bottom-0 left-0 h-[2px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
           style={{
             background: project.accent,

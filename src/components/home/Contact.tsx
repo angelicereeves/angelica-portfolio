@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
+
 import {
   ArrowUpRight,
   Asterisk,
@@ -13,6 +14,10 @@ import {
   Code2,
   MessageSquare,
 } from "lucide-react";
+
+// ============================================
+// CONTACT METHODS
+// ============================================
 
 const contactMethods = [
   {
@@ -36,6 +41,10 @@ const contactMethods = [
     icon: Code2,
   },
 ];
+
+// ============================================
+// MAIN CONTACT COMPONENT
+// ============================================
 
 export default function Contact() {
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
@@ -67,7 +76,10 @@ export default function Contact() {
       />
 
       <div className="relative mx-auto max-w-7xl">
-        {/* SECTION HEADER */}
+        {/* ==========================================
+            SECTION HEADER
+        ========================================== */}
+
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -75,6 +87,7 @@ export default function Contact() {
           transition={{ duration: 0.7 }}
           className="mb-16 md:mb-20"
         >
+          {/* SECTION LABEL */}
           <div className="mb-7 flex items-center gap-3">
             <Asterisk size={18} className="text-cyan" />
 
@@ -83,6 +96,7 @@ export default function Contact() {
             </span>
           </div>
 
+          {/* HEADING */}
           <h2 className="font-display text-[clamp(3.5rem,9vw,9rem)] leading-[0.95] font-bold tracking-[-0.07em]">
             LET&apos;S MAKE
             <br />
@@ -92,6 +106,7 @@ export default function Contact() {
             </span>
           </h2>
 
+          {/* DESCRIPTION */}
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/50">
             Have an idea, an opportunity, or a problem that needs solving?
             I&apos;m all ears. Well, technically eyes. This is a website.
@@ -109,11 +124,14 @@ export default function Contact() {
             </span>
           </div>
 
-          {/* CONTACT FORM CTA */}
+          {/* ==========================================
+              CONTACT FORM CTA
+          ========================================== */}
+
           <div className="mt-10">
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-4 rounded-full bg-cyan px-8 py-4 text-sm font-bold text-black transition-all duration-300 hover:bg-white hover:shadow-[0_0_35px_rgba(0,229,255,0.2)]"
+              className="group inline-flex items-center gap-4 rounded-full bg-cyan px-8 py-4 text-sm font-bold text-black transition-all duration-300 hover:bg-[#FF3CAC] hover:shadow-[0_0_30px_#FF3CAC77] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF3CAC]"
             >
               <MessageSquare size={18} />
 
@@ -125,13 +143,17 @@ export default function Contact() {
               />
             </Link>
 
-            <p className="mt-4 font-mono text-xs text-white/35">
+            {/* BRIGHTER MICROCOPY */}
+            <p className="mt-4 font-mono text-xs text-white/60">
               Prefer a form? I&apos;ve got one of those, too.
             </p>
           </div>
         </motion.div>
 
-        {/* CONTACT CARDS */}
+        {/* ==========================================
+            CONTACT CARDS
+        ========================================== */}
+
         <div className="grid gap-6 md:grid-cols-2">
           {contactMethods.map((method, index) => {
             const Icon = method.icon;
@@ -159,7 +181,10 @@ export default function Contact() {
                 />
 
                 <div className="relative z-10">
-                  {/* CARD HEADER */}
+                  {/* ==================================
+                      CARD HEADER
+                  ================================== */}
+
                   <div className="mb-12 flex items-center justify-between">
                     <div
                       className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5"
@@ -173,7 +198,10 @@ export default function Contact() {
                     </span>
                   </div>
 
-                  {/* CARD CONTENT */}
+                  {/* ==================================
+                      CARD CONTENT
+                  ================================== */}
+
                   <p
                     className="mb-3 font-mono text-xs tracking-widest uppercase"
                     style={{ color: method.accent }}
@@ -189,7 +217,10 @@ export default function Contact() {
                     {method.description}
                   </p>
 
-                  {/* EMAIL */}
+                  {/* ==================================
+                      EMAIL ADDRESS
+                  ================================== */}
+
                   <a
                     href={`mailto:${method.email}`}
                     className="mt-8 inline-flex max-w-full items-center gap-3 break-all font-display text-base font-semibold transition-opacity hover:opacity-70 sm:text-lg"
@@ -205,27 +236,28 @@ export default function Contact() {
                     />
                   </a>
 
-                  {/* ACTIONS */}
+                  {/* ==================================
+                      COPY EMAIL BUTTON
+                  ================================== */}
+
                   <div className="mt-8 flex flex-wrap gap-3">
-                    <a
-                      href={`mailto:${method.email}`}
-                      className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-cyan"
-                    >
-                      Send Email
-
-                      <ArrowUpRight size={16} />
-                    </a>
-
                     <button
                       type="button"
                       onClick={() => copyEmail(method.email)}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white/70 transition-colors hover:border-white/40 hover:text-white"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white/70 transition-[color,border-color,background-color,box-shadow] duration-300 hover:border-[var(--copy-accent)] hover:bg-[var(--copy-accent-bg)] hover:text-[var(--copy-accent)] hover:shadow-[0_0_20px_var(--copy-glow)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--copy-accent)]"
+                      style={
+                        {
+                          "--copy-accent": method.accent,
+                          "--copy-accent-bg": `${method.accent}10`,
+                          "--copy-glow": `${method.accent}55`,
+                        } as React.CSSProperties
+                      }
                     >
                       {isCopied ? (
                         <>
                           <Check
                             size={16}
-                            className="text-lime"
+                            style={{ color: method.accent }}
                           />
 
                           Copied!
@@ -252,7 +284,10 @@ export default function Contact() {
           })}
         </div>
 
-        {/* CLOSING MESSAGE */}
+        {/* ==========================================
+            CLOSING MESSAGE
+        ========================================== */}
+
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -262,8 +297,10 @@ export default function Contact() {
         >
           <p className="font-display text-xl text-white/60 md:text-2xl">
             Good ideas deserve to exist.
+
             <span className="text-white">
-              {" "}Let&apos;s make one happen.
+              {" "}
+              Let&apos;s make one happen.
             </span>
           </p>
 

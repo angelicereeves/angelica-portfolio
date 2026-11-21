@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+} from "motion/react";
+
 import {
   ArrowUpRight,
   Asterisk,
@@ -12,6 +17,12 @@ import {
   Terminal,
   ChevronRight,
 } from "lucide-react";
+
+import Link from "next/link";
+
+// ============================================
+// SKILL GROUPS
+// ============================================
 
 const skillGroups = [
   {
@@ -96,13 +107,79 @@ const skillGroups = [
   },
 ];
 
+// ============================================
+// SKILL BADGE
+// ============================================
+
+function SkillBadge({
+  skill,
+  accent,
+  index,
+  reduceMotion,
+}: {
+  skill: string;
+  accent: string;
+  index: number;
+  reduceMotion: boolean | null;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.span
+      initial={
+        reduceMotion
+          ? false
+          : { opacity: 0, scale: 0.9 }
+      }
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: reduceMotion ? 0 : 0.25,
+        delay: reduceMotion ? 0 : index * 0.035,
+      }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="cursor-default rounded-lg border bg-white/5 px-4 py-2.5 font-mono text-xs transition-[color,border-color,background-color,box-shadow,text-shadow] duration-300"
+      style={{
+        borderColor: isHovered
+          ? accent
+          : "rgba(255,255,255,0.1)",
+
+        color: isHovered
+          ? accent
+          : "rgba(255,255,255,0.75)",
+
+        backgroundColor: isHovered
+          ? `${accent}10`
+          : "rgba(255,255,255,0.05)",
+
+        boxShadow: isHovered
+          ? `0 0 18px ${accent}45, inset 0 0 12px ${accent}10`
+          : "none",
+
+        textShadow: isHovered
+          ? `0 0 10px ${accent}80`
+          : "none",
+      }}
+    >
+      {skill}
+    </motion.span>
+  );
+}
+
+// ============================================
+// MAIN SKILLS COMPONENT
+// ============================================
+
 export default function Skills() {
-  const [activeGroup, setActiveGroup] = useState("frontend");
+  const [activeGroup, setActiveGroup] =
+    useState("frontend");
+
   const reduceMotion = useReducedMotion();
 
   const active =
-    skillGroups.find((group) => group.id === activeGroup) ??
-    skillGroups[0];
+    skillGroups.find(
+      (group) => group.id === activeGroup
+    ) ?? skillGroups[0];
 
   const ActiveIcon = active.icon;
 
@@ -112,38 +189,74 @@ export default function Skills() {
       className="relative overflow-hidden border-t border-white/10 bg-background px-6 py-28 md:px-12 md:py-40 lg:px-20"
     >
       <div className="mx-auto max-w-7xl">
-        {/* SECTION HEADER */}
+
+        {/* ==========================================
+            SECTION HEADER
+        ========================================== */}
+
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 35 }}
+          initial={
+            reduceMotion
+              ? false
+              : { opacity: 0, y: 35 }
+          }
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="mb-16 md:mb-24"
+          className="mb-16 flex flex-col gap-8 md:mb-24 lg:flex-row lg:items-end lg:justify-between"
         >
-          <div className="mb-7 flex items-center gap-3">
-            <Asterisk size={18} className="text-lime" />
+          {/* LEFT — TITLE AND DESCRIPTION */}
 
-            <span className="font-mono text-xs tracking-[0.2em] text-white/40 uppercase">
-              // 003 — Skills
-            </span>
+          <div>
+            <div className="mb-7 flex items-center gap-3">
+              <Asterisk
+                size={18}
+                className="text-lime"
+              />
+
+              <span className="font-mono text-xs tracking-[0.2em] text-white/40 uppercase">
+                // 003 — Skills
+              </span>
+            </div>
+
+            <h2 className="font-display text-[clamp(3.5rem,8vw,8rem)] leading-[0.95] font-bold tracking-[-0.07em]">
+              THE
+              <br />
+
+              <span className="font-serif font-normal italic text-lime">
+                toolkit.
+              </span>
+            </h2>
+
+            <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/50">
+              Different tools. Same goal: making things
+              that work beautifully.
+            </p>
           </div>
 
-          <h2 className="font-display text-[clamp(3.5rem,8vw,8rem)] leading-[0.95] font-bold tracking-[-0.07em]">
-            THE
-            <br />
-            <span className="font-serif font-normal italic text-lime">
-              toolkit.
-            </span>
-          </h2>
+          {/* RIGHT — EXPLORE ALL SKILLS */}
 
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/50">
-            Different tools. Same goal: making things that work beautifully.
-          </p>
+          <Link
+            href="/skills"
+            className="group inline-flex shrink-0 items-center gap-3 self-start rounded-full border border-white/20 px-7 py-4 font-display text-sm font-semibold tracking-wide transition-all duration-300 hover:border-[#A855F7] hover:text-[#A855F7] hover:shadow-[0_0_20px_#A855F755] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A855F7] lg:mb-1 lg:self-auto"
+          >
+            EXPLORE ALL SKILLS
+
+            <ArrowUpRight
+              size={18}
+              className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+            />
+          </Link>
         </motion.div>
 
-        {/* INTERACTIVE SKILLS AREA */}
+        {/* ==========================================
+            INTERACTIVE SKILLS AREA
+        ========================================== */}
+
         <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
+
           {/* LEFT — SKILL SELECTOR */}
+
           <div
             role="group"
             aria-label="Skill categories"
@@ -151,15 +264,19 @@ export default function Skills() {
           >
             {skillGroups.map((group) => {
               const Icon = group.icon;
-              const isActive = activeGroup === group.id;
+
+              const isActive =
+                activeGroup === group.id;
 
               return (
                 <button
                   key={group.id}
                   type="button"
-                  onClick={() => setActiveGroup(group.id)}
+                  onClick={() =>
+                    setActiveGroup(group.id)
+                  }
                   aria-pressed={isActive}
-                  className={`group flex w-full items-center gap-5 rounded-[20px] border p-5 text-left transition-all duration-300 md:p-6 ${
+                  className={`group flex w-full items-center gap-5 rounded-[20px] border p-5 text-left transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white md:p-6 ${
                     isActive
                       ? "border-white/20 bg-[#17171D]"
                       : "border-white/10 bg-[#111116] hover:border-white/20"
@@ -170,14 +287,23 @@ export default function Skills() {
                       : "none",
                   }}
                 >
+                  {/* CATEGORY ICON */}
+
                   <div
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5"
                     style={{
-                      color: isActive ? group.accent : "#9696A6",
+                      color: isActive
+                        ? group.accent
+                        : "#9696A6",
                     }}
                   >
-                    <Icon size={23} strokeWidth={1.5} />
+                    <Icon
+                      size={23}
+                      strokeWidth={1.5}
+                    />
                   </div>
+
+                  {/* CATEGORY LABEL */}
 
                   <div className="flex-1">
                     <span className="mb-1 block font-mono text-[10px] tracking-widest text-white/30">
@@ -189,6 +315,8 @@ export default function Skills() {
                     </span>
                   </div>
 
+                  {/* CATEGORY ARROW */}
+
                   <ChevronRight
                     size={19}
                     className={`transition-transform duration-300 ${
@@ -197,7 +325,9 @@ export default function Skills() {
                         : "text-white/30 group-hover:translate-x-1"
                     }`}
                     style={{
-                      color: isActive ? group.accent : undefined,
+                      color: isActive
+                        ? group.accent
+                        : undefined,
                     }}
                   />
                 </button>
@@ -205,26 +335,41 @@ export default function Skills() {
             })}
           </div>
 
-          {/* RIGHT — TERMINAL PANEL */}
+          {/* ==========================================
+              RIGHT — TERMINAL PANEL
+          ========================================== */}
+
           <div className="relative min-h-[490px] overflow-hidden rounded-[24px] border border-white/10 bg-[#0D0D12]">
-            {/* Terminal Header */}
+
+            {/* TERMINAL HEADER */}
+
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
+
               <div className="flex items-center gap-3">
-                <Terminal size={17} className="text-white/40" />
+                <Terminal
+                  size={17}
+                  className="text-white/40"
+                />
 
                 <span className="font-mono text-xs tracking-widest text-white/40 uppercase">
                   angelica / skills
                 </span>
               </div>
 
-              <div className="flex items-center gap-2" aria-hidden="true">
+              {/* TERMINAL STATUS DOTS */}
+
+              <div
+                className="flex items-center gap-2"
+                aria-hidden="true"
+              >
                 <span className="h-2.5 w-2.5 rounded-full bg-pink" />
                 <span className="h-2.5 w-2.5 rounded-full bg-lime" />
                 <span className="h-2.5 w-2.5 rounded-full bg-cyan" />
               </div>
             </div>
 
-            {/* Terminal Content */}
+            {/* TERMINAL CONTENT */}
+
             <div className="p-7 md:p-10">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -234,15 +379,24 @@ export default function Skills() {
                       ? { opacity: 1 }
                       : { opacity: 0, y: 15 }
                   }
-                  animate={{ opacity: 1, y: 0 }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
                   exit={
                     reduceMotion
                       ? { opacity: 1 }
                       : { opacity: 0, y: -10 }
                   }
-                  transition={{ duration: reduceMotion ? 0 : 0.25 }}
+                  transition={{
+                    duration: reduceMotion
+                      ? 0
+                      : 0.25,
+                  }}
                 >
-                  {/* Category Icon */}
+
+                  {/* CATEGORY ICON */}
+
                   <div
                     className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/5"
                     style={{
@@ -250,85 +404,67 @@ export default function Skills() {
                       boxShadow: `0 0 45px ${active.accent}15`,
                     }}
                   >
-                    <ActiveIcon size={30} strokeWidth={1.5} />
+                    <ActiveIcon
+                      size={30}
+                      strokeWidth={1.5}
+                    />
                   </div>
+
+                  {/* CATEGORY LABEL */}
 
                   <p
                     className="mb-3 font-mono text-xs tracking-widest uppercase"
-                    style={{ color: active.accent }}
+                    style={{
+                      color: active.accent,
+                    }}
                   >
                     // {active.shortTitle.toUpperCase()}_STACK
                   </p>
+
+                  {/* CATEGORY TITLE */}
 
                   <h3 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
                     {active.title}
                   </h3>
 
+                  {/* CATEGORY DESCRIPTION */}
+
                   <p className="mt-5 max-w-lg leading-[1.8] text-white/50">
                     {active.description}
                   </p>
 
-                  {/* Skills */}
+                  {/* ==================================
+                      INDIVIDUAL SKILLS
+                  ================================== */}
+
                   <div className="mt-9 flex flex-wrap gap-3">
-                    {active.skills.map((skill, index) => (
-                      <motion.span
-                        key={skill}
-                        initial={
-                          reduceMotion
-                            ? false
-                            : { opacity: 0, scale: 0.9 }
-                        }
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{
-                          duration: 0.25,
-                          delay: reduceMotion ? 0 : index * 0.035,
-                        }}
-                        className="rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 font-mono text-xs text-white/75 transition-colors hover:border-white/30"
-                      >
-                        {skill}
-                      </motion.span>
-                    ))}
+                    {active.skills.map(
+                      (skill, index) => (
+                        <SkillBadge
+                          key={skill}
+                          skill={skill}
+                          accent={active.accent}
+                          index={index}
+                          reduceMotion={reduceMotion}
+                        />
+                      )
+                    )}
                   </div>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Decorative Corner */}
+            {/* DECORATIVE CORNER */}
+
             <div
               aria-hidden="true"
               className="pointer-events-none absolute right-0 bottom-0 h-40 w-40 rounded-tl-full opacity-[0.06]"
-              style={{ background: active.accent }}
+              style={{
+                background: active.accent,
+              }}
             />
           </div>
         </div>
-
-        {/* CLOSING STATEMENT */}
-        <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-10 md:flex-row md:items-center md:justify-between"
-        >
-          <p className="max-w-2xl font-display text-xl leading-relaxed text-white/60 md:text-2xl">
-            The tools change.
-            <span className="text-white">
-              {" "}The curiosity doesn&apos;t.
-            </span>
-          </p>
-
-          <a
-            href="#contact"
-            className="group inline-flex items-center gap-3 self-start rounded-full border border-white/20 px-7 py-4 text-sm font-semibold transition-colors hover:border-lime hover:text-lime"
-          >
-            HAVE A PROJECT IN MIND?
-
-            <ArrowUpRight
-              size={18}
-              className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-            />
-          </a>
-        </motion.div>
       </div>
     </section>
   );

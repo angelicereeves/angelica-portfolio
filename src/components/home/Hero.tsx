@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import {
-  ArrowDown,
   ArrowUpRight,
   Download,
   Sparkles,
@@ -10,14 +10,189 @@ import {
 
 import ScratchCanvas from "@/components/interactive/ScratchCanvas";
 
+const neonColors = [
+  "#00E5FF",
+  "#A855F7",
+  "#B6FF3B",
+  "#FF3CAC",
+  "#4D7CFF",
+];
+
+const systemMessage = "[ SYSTEM ONLINE ]";
+
+// ============================================
+// ANIMATED SYSTEM STATUS
+// ============================================
+
+function SystemStatus() {
+  const reduceMotion = useReducedMotion();
+
+  const [displayText, setDisplayText] = useState("");
+  const [colorIndex, setColorIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    // SHORT PAUSE AFTER MESSAGE COMPLETES
+    if (isPaused) {
+      timeout = setTimeout(() => {
+        setIsPaused(false);
+        setIsDeleting(true);
+      }, 650);
+
+      return () => clearTimeout(timeout);
+    }
+
+    // TYPE MESSAGE CHARACTER BY CHARACTER
+    if (!isDeleting && displayText.length < systemMessage.length) {
+      timeout = setTimeout(() => {
+        setDisplayText(
+          systemMessage.slice(0, displayText.length + 1)
+        );
+      }, 90);
+    }
+
+    // BRIEF PAUSE BEFORE DELETING
+    else if (!isDeleting) {
+      timeout = setTimeout(() => {
+        setIsPaused(true);
+      }, 150);
+    }
+
+    // DELETE MESSAGE CHARACTER BY CHARACTER
+    else if (displayText.length > 0) {
+      timeout = setTimeout(() => {
+        setDisplayText(displayText.slice(0, -1));
+      }, 45);
+    }
+
+    // SWITCH COLOR AND RESTART
+    else {
+      timeout = setTimeout(() => {
+        setIsDeleting(false);
+        setColorIndex(
+          (prev) => (prev + 1) % neonColors.length
+        );
+      }, 150);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, isPaused, reduceMotion]);
+
+  return (
+    <span
+      className="ml-auto hidden min-w-[155px] font-mono text-xs tracking-wider md:inline-flex"
+      style={{
+        color: neonColors[colorIndex],
+        textShadow: `0 0 10px ${neonColors[colorIndex]}80`,
+      }}
+      aria-label="System online"
+    >
+      <span aria-hidden="true">
+        {reduceMotion ? systemMessage : displayText}
+      </span>
+
+      {/* TERMINAL CURSOR */}
+      {!reduceMotion && (
+        <span
+          aria-hidden="true"
+          className="ml-1 animate-pulse"
+        >
+          ▌
+        </span>
+      )}
+    </span>
+  );
+}
+
+// ============================================
+// INTERACTIVE "BENEATH" EASTER EGG
+// ============================================
+
+function InteractiveBeneath() {
+  const reduceMotion = useReducedMotion();
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  useEffect(() => {
+    if (!isRevealed) return;
+
+    const timeout = setTimeout(() => {
+      setIsRevealed(false);
+    }, 2500);
+
+    return () => clearTimeout(timeout);
+  }, [isRevealed]);
+
+  return (
+    <span className="relative inline-block">
+      <button
+        type="button"
+        onClick={() => setIsRevealed(true)}
+        aria-label="Beneath. Click to reveal a hidden message."
+        aria-pressed={isRevealed}
+        className="group relative inline-block cursor-pointer border-0 bg-transparent p-0 font-serif font-normal italic text-cyan outline-none"
+      >
+        {/* INTERACTIVE WORD */}
+        <motion.span
+          className="inline-block transition-[text-shadow] duration-300 group-hover:[text-shadow:0_0_12px_#00E5FF,0_0_30px_#00E5FF88] group-focus-visible:[text-shadow:0_0_12px_#00E5FF,0_0_30px_#00E5FF88]"
+          animate={{
+            y: isRevealed && !reduceMotion ? 65 : 0,
+            opacity: isRevealed ? 0 : 1,
+          }}
+          whileHover={
+            reduceMotion || isRevealed
+              ? undefined
+              : { y: 5 }
+          }
+          transition={{
+            duration: reduceMotion ? 0 : 0.4,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          beneath
+        </motion.span>
+      </button>
+
+      {/* HIDDEN MESSAGE */}
+      <motion.span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center whitespace-nowrap font-mono text-[clamp(0.6rem,1.2vw,0.9rem)] font-medium tracking-wider text-[#B6FF3B]"
+        initial={false}
+        animate={{
+          opacity: isRevealed ? 1 : 0,
+          y: isRevealed && !reduceMotion ? 0 : -10,
+        }}
+        transition={{
+          duration: reduceMotion ? 0 : 0.4,
+          delay: isRevealed && !reduceMotion ? 0.35 : 0,
+        }}
+      >
+        curiosity looks good on you.
+      </motion.span>
+
+      {/* ACCESSIBLE ANNOUNCEMENT */}
+      <span className="sr-only" aria-live="polite">
+        {isRevealed ? "Curiosity looks good on you." : ""}
+      </span>
+    </span>
+  );
+}
+
+// ============================================
+// HERO COMPONENT
+// ============================================
+
 export default function Hero() {
   return (
     <section
       id="home"
       className="relative min-h-screen overflow-hidden bg-background px-6 pt-40 pb-20 md:px-12 lg:px-20"
     >
-      {/* Subtle background grid */}
-
+      {/* SUBTLE BACKGROUND GRID */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.035]"
@@ -31,27 +206,26 @@ export default function Hero() {
       />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        {/* Intro */}
-
+        {/* INTRO */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           className="mb-10 flex flex-wrap items-center gap-3"
         >
+          {/* STATUS DOT */}
           <span className="h-2 w-2 rounded-full bg-lime shadow-[0_0_15px_#C7FF4D]" />
 
-          <p className="font-mono text-xs tracking-[0.2em] text-white/50 uppercase">
+          {/* NAME & TITLE */}
+          <p className="font-mono text-sm tracking-[0.15em] text-white/65 uppercase md:text-base">
             Angelica Reeves // Creative Developer
           </p>
 
-          <span className="ml-auto hidden font-mono text-xs text-cyan md:block">
-            [ SYSTEM ONLINE ]
-          </span>
+          {/* ANIMATED TERMINAL */}
+          <SystemStatus />
         </motion.div>
 
-        {/* Headline */}
-
+        {/* MAIN HEADLINE */}
         <motion.h1
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,20 +235,17 @@ export default function Hero() {
           }}
           className="font-display max-w-6xl text-[clamp(3.2rem,8vw,8.5rem)] leading-[0.95] font-bold tracking-[-0.075em]"
         >
-          THERE'S MORE
+          THERE&apos;S MORE
           <br />
 
-          <span className="font-serif font-normal italic text-cyan">
-            beneath
-          </span>{" "}
+          <InteractiveBeneath />{" "}
           THE
           <br />
 
           SURFACE<span className="text-pink">.</span>
         </motion.h1>
 
-        {/* Description */}
-
+        {/* DESCRIPTION */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,28 +264,38 @@ export default function Hero() {
             </p>
           </div>
 
+          {/* CTA BUTTONS */}
           <div className="flex flex-wrap gap-3">
+            {/* EXPLORE WORK — NEON LIME */}
             <a
               href="#work"
-              className="flex items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-bold text-black transition-all hover:bg-cyan"
+              className="group flex items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-bold text-black transition-all duration-300 hover:bg-[#B6FF3B] hover:shadow-[0_0_20px_#B6FF3B66] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B6FF3B]"
             >
               Explore My Work
-              <ArrowUpRight size={18} />
+
+              <ArrowUpRight
+                size={18}
+                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
             </a>
 
+            {/* RESUME — NEON PINK */}
             <a
               href="/resume.pdf"
               download
-              className="flex items-center gap-3 rounded-full border border-white/20 px-7 py-4 text-sm font-semibold text-white transition-all hover:border-cyan hover:text-cyan"
+              className="group flex items-center gap-3 rounded-full border border-white/20 px-7 py-4 text-sm font-semibold text-white transition-all duration-300 hover:border-[#FF3CAC] hover:text-[#FF3CAC] hover:shadow-[0_0_20px_#FF3CAC55] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF3CAC]"
             >
               Resume
-              <Download size={18} />
+
+              <Download
+                size={18}
+                className="transition-all duration-300 group-hover:drop-shadow-[0_0_8px_#FF3CAC]"
+              />
             </a>
           </div>
         </motion.div>
 
-        {/* Scratch Canvas */}
-
+        {/* SCRATCH CANVAS */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -138,21 +319,7 @@ export default function Hero() {
           <ScratchCanvas />
         </motion.div>
 
-        {/* Scroll */}
-
-        <div className="mt-16 flex items-center justify-between border-t border-white/10 pt-6">
-          <p className="font-mono text-xs text-white/30">
-            DESIGN. DEVELOP. EXPERIMENT. REPEAT.
-          </p>
-
-          <a
-            href="#work"
-            className="flex items-center gap-2 text-xs font-semibold tracking-widest text-white/60 uppercase transition-colors hover:text-cyan"
-          >
-            Scroll to explore
-            <ArrowDown size={16} />
-          </a>
-        </div>
+        
       </div>
     </section>
   );

@@ -11,11 +11,11 @@ import {
 } from "lucide-react";
 
 const footerLinks = [
-  { label: "Home", href: "/" },
-  { label: "Work", href: "/work" },
-  { label: "About", href: "/about" },
-  { label: "Skills", href: "/skills" },
-  { label: "Contact", href: "/contact" },
+  { label: "Home", href: "/", color: "#FF3CAC" },
+  { label: "Work", href: "/work", color: "#00E5FF" },
+  { label: "About", href: "/about", color: "#A855F7" },
+  { label: "Skills", href: "/skills", color: "#B6FF3B" },
+  { label: "Contact", href: "/contact", color: "#4D7CFF" },
 ];
 
 export default function Footer() {
@@ -41,13 +41,21 @@ export default function Footer() {
         <div className="grid gap-14 pb-16 md:grid-cols-[1.3fr_0.7fr_1fr] md:gap-10">
           {/* BRAND */}
           <div>
-            <Link
-              href="/"
-              aria-label="Angelica Reeves — Homepage"
-              className="inline-block font-display text-6xl font-bold tracking-[-0.1em] transition-opacity hover:opacity-70 md:text-8xl"
+            {/* MULTICOLOR NEON LOGO — NOT CLICKABLE */}
+            <div
+              className="group inline-block cursor-default font-display text-6xl font-bold tracking-[-0.1em] md:text-8xl"
+              aria-label="AR."
             >
-              AR<span className="text-cyan">.</span>
-            </Link>
+              <span className="inline-block transition-all duration-300 group-hover:text-[#00E5FF] group-hover:[text-shadow:0_0_8px_#00E5FF,0_0_20px_#00E5FF]">
+                A
+              </span>
+              <span className="inline-block transition-all duration-300 group-hover:text-[#A855F7] group-hover:[text-shadow:0_0_8px_#A855F7,0_0_20px_#A855F7]">
+                R
+              </span>
+              <span className="inline-block text-cyan transition-all duration-300 group-hover:text-[#FF3CAC] group-hover:[text-shadow:0_0_8px_#FF3CAC,0_0_20px_#FF3CAC]">
+                .
+              </span>
+            </div>
 
             <p className="mt-6 max-w-xs text-base leading-[1.9] text-white/45">
               Developer. Designer. Professional problem-solver.
@@ -55,9 +63,10 @@ export default function Footer() {
               just to see if she can solve it.
             </p>
 
+            {/* LOCATION */}
             <div className="mt-7 flex items-center gap-2 font-mono text-xs tracking-wider text-white/30 uppercase">
-              <span className="h-2 w-2 rounded-full bg-lime" />
-              Based in Sarandë, Albania
+              <span className="h-2 w-2 shrink-0 rounded-full bg-lime" />
+              US Citizen - Based in Sarandë, Albania
             </div>
 
             {/* CONTACT CTA */}
@@ -88,13 +97,18 @@ export default function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="group inline-flex w-fit items-center gap-2 text-sm text-white/65 transition-colors hover:text-cyan"
+                  className="group inline-flex w-fit items-center gap-2 text-sm text-white/65 transition-all duration-300 hover:text-[var(--accent)] hover:[text-shadow:0_0_8px_var(--accent),0_0_18px_var(--accent)] focus-visible:text-[var(--accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
+                  style={
+                    {
+                      "--accent": link.color,
+                    } as React.CSSProperties
+                  }
                 >
                   {link.label}
 
                   <ArrowUpRight
                     size={13}
-                    className="opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                    className="opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100 group-focus-visible:opacity-100"
                   />
                 </Link>
               ))}
@@ -116,14 +130,17 @@ export default function Footer() {
 
                 <a
                   href="mailto:angelicareeves@proton.me"
-                  className="group inline-flex items-center gap-2 break-all text-sm text-white/70 transition-colors hover:text-cyan"
+                  className="group inline-flex items-center gap-2 break-all text-sm text-white/70 transition-all duration-300 hover:text-[#A855F7] hover:[text-shadow:0_0_8px_#A855F7,0_0_18px_#A855F7] focus-visible:text-[#A855F7] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A855F7]"
                 >
-                  <Mail size={15} className="shrink-0" />
+                  <Mail
+                    size={15}
+                    className="shrink-0 transition-all duration-300 group-hover:drop-shadow-[0_0_6px_#A855F7]"
+                  />
                   angelicareeves@proton.me
                 </a>
               </div>
 
-              {/* AGENCY EMAIL */}
+              {/* AGENCY EMAIL — UNCHANGED */}
               <div>
                 <p className="mb-2 font-mono text-[10px] tracking-widest text-white/30 uppercase">
                   Websites & Digital Projects
@@ -138,7 +155,7 @@ export default function Footer() {
                 </a>
               </div>
 
-              {/* GITHUB */}
+              {/* GITHUB — UNCHANGED STYLING */}
               <div>
                 <p className="mb-2 font-mono text-[10px] tracking-widest text-white/30 uppercase">
                   Find My Code
@@ -197,15 +214,15 @@ export default function Footer() {
             and a suspicious amount of curiosity.
           </p>
 
-          {/* BACK TO TOP */}
+          {/* BACK TO TOP — NEON GREEN */}
           <button
             type="button"
             onClick={scrollToTop}
-            className="group inline-flex w-fit items-center gap-3 font-mono text-xs tracking-wider text-white/50 uppercase transition-colors hover:text-cyan"
+            className="group inline-flex w-fit items-center gap-3 font-mono text-xs tracking-wider text-white/50 uppercase transition-all duration-300 hover:text-[#B6FF3B] hover:[text-shadow:0_0_8px_#B6FF3B,0_0_18px_#B6FF3B] focus-visible:text-[#B6FF3B] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B6FF3B]"
           >
             Back to Top
 
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 transition-all group-hover:-translate-y-1 group-hover:border-cyan">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-[#B6FF3B] group-hover:shadow-[0_0_12px_#B6FF3B55] group-focus-visible:border-[#B6FF3B]">
               <ArrowUp size={16} />
             </span>
           </button>
