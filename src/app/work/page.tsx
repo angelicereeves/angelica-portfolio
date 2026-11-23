@@ -1,5 +1,4 @@
 "use client";
-
 import {
   useEffect,
   useMemo,
@@ -21,24 +20,18 @@ import {
   Layers3,
   Sparkles,
 } from "lucide-react";
-
 import {
   getAllProjects,
   projectCategories,
   type Project,
   type ProjectCategory,
 } from "@/data/projects";
-
 // ============================================================
 // CONFIG
 // ============================================================
-
 type FilterId = ProjectCategory | "all";
-
 const ALL_PROJECTS = getAllProjects();
-
 const EASE = [0.22, 1, 0.36, 1] as const;
-
 const reveal = {
   hidden: {
     opacity: 0,
@@ -53,14 +46,11 @@ const reveal = {
     },
   },
 };
-
 // ============================================================
 // UTILITIES
 // ============================================================
-
 function hexToRgb(hex: string) {
-  const normalized = hex.replace("#");
-
+  const normalized = hex.replace("#", "");
   const full =
     normalized.length === 3
       ? normalized
@@ -68,21 +58,17 @@ function hexToRgb(hex: string) {
           .map((char) => char + char)
           .join("")
       : normalized;
-
   const value = parseInt(full, 16);
-
   return {
     r: (value >> 16) & 255,
     g: (value >> 8) & 255,
     b: value & 255,
   };
 }
-
 function rgba(hex: string, alpha: number) {
   const { r, g, b } = hexToRgb(hex);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
-
 function getCategoryLabel(category: ProjectCategory) {
   switch (category) {
     case "business":
@@ -93,57 +79,41 @@ function getCategoryLabel(category: ProjectCategory) {
       return "Concept";
   }
 }
-
 function getProjectLink(project: Project) {
   return project.liveUrl || project.githubUrl || null;
 }
-
 function getProjectLinkLabel(project: Project) {
   return project.liveUrl ? "Visit live project" : "View source code";
 }
-
 // ============================================================
 // ANIMATED NUMBER
 // ============================================================
-
 function AnimatedNumber({ value }: { value: number }) {
   const [display, setDisplay] = useState(0);
-
   useEffect(() => {
     let frame = 0;
     let start: number | null = null;
-
     const duration = 900;
-
     function animate(timestamp: number) {
       if (start === null) start = timestamp;
-
       const progress = Math.min(
         (timestamp - start) / duration,
         1
       );
-
       const eased = 1 - Math.pow(1 - progress, 3);
-
       setDisplay(Math.round(value * eased));
-
       if (progress < 1) {
         frame = requestAnimationFrame(animate);
       }
     }
-
     frame = requestAnimationFrame(animate);
-
     return () => cancelAnimationFrame(frame);
   }, [value]);
-
   return <span>{String(display).padStart(2, "0")}</span>;
 }
-
 // ============================================================
 // HERO DECORATION
 // ============================================================
-
 function HeroDecoration() {
   return (
     <div
@@ -161,7 +131,6 @@ function HeroDecoration() {
           backgroundSize: "72px 72px",
         }}
       />
-
       {/* Atmospheric glows */}
       <div
         className="absolute -right-32 top-0 h-[500px] w-[500px] rounded-full blur-[150px]"
@@ -169,14 +138,12 @@ function HeroDecoration() {
           background: "rgba(168,85,247,0.09)",
         }}
       />
-
       <div
         className="absolute -left-40 bottom-0 h-[350px] w-[350px] rounded-full blur-[140px]"
         style={{
           background: "rgba(0,229,255,0.045)",
         }}
       />
-
       {/* Decorative star */}
       <motion.div
         className="absolute right-[8%] top-[18%] hidden text-[#C7FF4D] lg:block"
@@ -195,23 +162,19 @@ function HeroDecoration() {
           className="opacity-70"
         />
       </motion.div>
-
       <div className="absolute bottom-[16%] right-[20%] hidden text-[#A855F7]/50 md:block">
         <Sparkles size={18} strokeWidth={1} />
       </div>
     </div>
   );
 }
-
 // ============================================================
 // HERO
 // ============================================================
-
 function WorkHero() {
   return (
     <section className="relative overflow-hidden border-b border-white/[0.08]">
       <HeroDecoration />
-
       <div className="relative mx-auto max-w-[1500px] px-5 pb-16 pt-24 sm:px-8 sm:pb-20 sm:pt-28 lg:px-12 lg:pb-28 lg:pt-36">
         {/* Eyebrow */}
         <motion.div
@@ -221,12 +184,10 @@ function WorkHero() {
           className="mb-9 flex items-center gap-3"
         >
           <span className="h-2 w-2 rounded-full bg-[#C7FF4D] shadow-[0_0_14px_rgba(199,255,77,0.65)]" />
-
           <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/50 sm:text-xs">
             Selected & assorted creations
           </span>
         </motion.div>
-
         {/* Heading */}
         <div className="relative">
           <motion.h1
@@ -255,7 +216,6 @@ function WorkHero() {
             </span>
             <span className="text-white/20">.</span>
           </motion.h1>
-
           {/* Side annotation */}
           <motion.div
             initial={{
@@ -273,7 +233,6 @@ function WorkHero() {
             className="absolute bottom-3 right-0 hidden items-center gap-3 xl:flex"
           >
             <span className="h-px w-12 bg-white/20" />
-
             <span className="text-[10px] uppercase tracking-[0.22em] text-white/35">
               A collection of
               <br />
@@ -283,7 +242,6 @@ function WorkHero() {
             </span>
           </motion.div>
         </div>
-
         {/* Bottom content */}
         <div className="mt-14 grid gap-10 md:mt-20 md:grid-cols-[1fr_auto] md:items-end">
           <motion.div
@@ -308,14 +266,12 @@ function WorkHero() {
                 “what if I built that?”
               </span>
             </p>
-
             <p className="mt-4 max-w-[510px] text-sm leading-7 text-white/40 sm:text-[15px]">
               A collection of real-world solutions and
               self-initiated ideas. Different problems, different
               approaches, one mildly obsessive attention to detail.
             </p>
           </motion.div>
-
           <motion.div
             initial={{
               opacity: 0,
@@ -335,12 +291,10 @@ function WorkHero() {
               <div className="text-[clamp(4rem,8vw,7rem)] font-light leading-none tracking-[-0.09em] text-white">
                 <AnimatedNumber value={ALL_PROJECTS.length} />
               </div>
-
               <div className="mt-2 text-[10px] uppercase tracking-[0.25em] text-white/40">
                 Projects & counting
               </div>
             </div>
-
             <ArrowDownRight
               size={30}
               strokeWidth={1}
@@ -352,16 +306,13 @@ function WorkHero() {
     </section>
   );
 }
-
 // ============================================================
 // FILTERS
 // ============================================================
-
 interface ProjectFiltersProps {
   active: FilterId;
   onChange: (filter: FilterId) => void;
 }
-
 function ProjectFilters({
   active,
   onChange,
@@ -381,13 +332,11 @@ function ProjectFilters({
     }),
     []
   );
-
   return (
     <div className="flex flex-wrap gap-2 sm:gap-3">
       {projectCategories.map((category) => {
         const id = category.id as FilterId;
         const selected = active === id;
-
         return (
           <button
             key={id}
@@ -415,7 +364,6 @@ function ProjectFilters({
             <span className="relative z-10">
               {category.label}
             </span>
-
             <span
               className={`
                 relative z-10 text-[10px]
@@ -434,24 +382,20 @@ function ProjectFilters({
     </div>
   );
 }
-
 // ============================================================
 // PROJECT PLACEHOLDER
 // ============================================================
-
 interface ProjectVisualProps {
   project: Project;
   index: number;
   hovered: boolean;
 }
-
 function ProjectVisual({
   project,
   index,
   hovered,
 }: ProjectVisualProps) {
   const accent = project.accent;
-
   return (
     <div
       className="relative flex h-full min-h-[220px] w-full items-center justify-center overflow-hidden sm:min-h-[280px]"
@@ -481,7 +425,6 @@ function ProjectVisual({
           backgroundSize: "36px 36px",
         }}
       />
-
       {/* Large abstract rings */}
       <motion.div
         className="absolute -right-[12%] -top-[28%] aspect-square w-[75%] rounded-full border"
@@ -497,7 +440,6 @@ function ProjectVisual({
           ease: EASE,
         }}
       />
-
       <motion.div
         className="absolute -right-[3%] -top-[15%] aspect-square w-[55%] rounded-full border"
         style={{
@@ -512,7 +454,6 @@ function ProjectVisual({
           ease: EASE,
         }}
       />
-
       {/* Diagonal accent */}
       <div
         className="absolute -left-24 bottom-[12%] h-px w-[85%] -rotate-[25deg]"
@@ -523,7 +464,6 @@ function ProjectVisual({
           )}, transparent)`,
         }}
       />
-
       {/* Main visual */}
       <motion.div
         className="relative z-10 flex flex-col items-center gap-5"
@@ -566,7 +506,6 @@ function ProjectVisual({
             />
           )}
         </div>
-
         <div className="text-center">
           <span
             className="text-[10px] font-semibold uppercase tracking-[0.35em]"
@@ -582,7 +521,6 @@ function ProjectVisual({
           </span>
         </div>
       </motion.div>
-
       {/* Top corner metadata */}
       <div className="absolute left-5 top-5 flex items-center gap-2 sm:left-7 sm:top-7">
         <span
@@ -592,24 +530,20 @@ function ProjectVisual({
             boxShadow: `0 0 10px ${rgba(accent, 0.7)}`,
           }}
         />
-
         <span className="text-[9px] uppercase tracking-[0.2em] text-white/40">
           {getCategoryLabel(project.category)}
         </span>
       </div>
-
       <span className="absolute right-5 top-5 font-mono text-[10px] text-white/25 sm:right-7 sm:top-7">
         {String(index + 1).padStart(2, "0")} /{" "}
         {String(ALL_PROJECTS.length).padStart(2, "0")}
       </span>
-
       {/* Bottom annotation — year removed */}
       <div className="absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
         <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
           Designed & developed
         </span>
       </div>
-
       {/* Hover glow */}
       <motion.div
         className="pointer-events-none absolute inset-0"
@@ -630,17 +564,14 @@ function ProjectVisual({
     </div>
   );
 }
-
 // ============================================================
 // PROJECT CARD
 // ============================================================
-
 interface ProjectCardProps {
   project: Project;
   index: number;
   large?: boolean;
 }
-
 function ProjectCard({
   project,
   index,
@@ -649,36 +580,26 @@ function ProjectCard({
   const [hovered, setHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
-
   const cardRef = useRef<HTMLElement>(null);
-
   const [mouse, setMouse] = useState({
     x: 50,
     y: 50,
   });
-
   const accent = project.accent;
   const primaryLink = getProjectLink(project);
-
   useEffect(() => {
     setImageLoaded(false);
     setImageFailed(false);
   }, [project.thumbnail]);
-
   function handleMouseMove(event: MouseEvent<HTMLElement>) {
     if (!cardRef.current) return;
-
     const rect = cardRef.current.getBoundingClientRect();
-
     const x =
       ((event.clientX - rect.left) / rect.width) * 100;
-
     const y =
       ((event.clientY - rect.top) / rect.height) * 100;
-
     setMouse({ x, y });
   }
-
   return (
     <motion.article
       ref={cardRef}
@@ -730,11 +651,9 @@ function ProjectCard({
           )`,
         }}
       />
-
       {/* ================================================== */}
       {/* PREVIEW */}
       {/* ================================================== */}
-
       <div
         className={`
           relative overflow-hidden border-b border-white/[0.06]
@@ -753,7 +672,6 @@ function ProjectCard({
             hovered={hovered}
           />
         </div>
-
         {/* Screenshot */}
         {!imageFailed && project.thumbnail && (
           <Image
@@ -775,11 +693,9 @@ function ProjectCard({
             onError={() => setImageFailed(true)}
           />
         )}
-
         {imageLoaded && (
           <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
         )}
-
         {/* Featured badge */}
         {project.featured && (
           <div className="absolute bottom-5 left-5 z-20 sm:bottom-6 sm:left-6">
@@ -796,7 +712,6 @@ function ProjectCard({
             </span>
           </div>
         )}
-
         {/* External preview action */}
         {primaryLink && (
           <a
@@ -820,11 +735,9 @@ function ProjectCard({
           </a>
         )}
       </div>
-
       {/* ================================================== */}
       {/* CONTENT */}
       {/* ================================================== */}
-
       <div
         className={`
           relative z-10 flex flex-1 flex-col
@@ -839,18 +752,15 @@ function ProjectCard({
           >
             {getCategoryLabel(project.category)}
           </span>
-
           {project.category === "concept" && (
             <>
               <span className="h-1 w-1 rounded-full bg-white/20" />
-
               <span className="text-[10px] uppercase tracking-[0.16em] text-white/35">
                 Self-initiated
               </span>
             </>
           )}
         </div>
-
         {/* Title */}
         <h3
           className={`
@@ -868,12 +778,10 @@ function ProjectCard({
         >
           {project.title}
         </h3>
-
         {/* Subtitle */}
         <p className="mt-2 text-xs font-medium uppercase tracking-[0.13em] text-white/35">
           {project.subtitle}
         </p>
-
         {/* Description */}
         <p
           className={`
@@ -883,7 +791,6 @@ function ProjectCard({
         >
           {project.description}
         </p>
-
         {/* Technologies */}
         <div className="mt-7 flex flex-wrap gap-2">
           {project.technologies
@@ -896,7 +803,6 @@ function ProjectCard({
                 {technology}
               </span>
             ))}
-
           {project.technologies.length >
             (large ? 5 : 4) && (
             <span className="rounded-full border border-white/[0.06] px-3 py-1.5 text-[10px] text-white/30">
@@ -906,7 +812,6 @@ function ProjectCard({
             </span>
           )}
         </div>
-
         {/* Actions */}
         <div className="mt-auto pt-8">
           <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.08] pt-5">
@@ -915,7 +820,6 @@ function ProjectCard({
               className="group/link inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-white/75 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C7FF4D]"
             >
               Explore project
-
               <ArrowRight
                 size={15}
                 strokeWidth={1.5}
@@ -923,7 +827,6 @@ function ProjectCard({
                 style={{ color: accent }}
               />
             </Link>
-
             {primaryLink && (
               <a
                 href={primaryLink}
@@ -947,7 +850,6 @@ function ProjectCard({
           </div>
         </div>
       </div>
-
       {/* Bottom accent line */}
       <motion.div
         className="absolute bottom-0 left-0 z-20 h-[2px]"
@@ -966,11 +868,9 @@ function ProjectCard({
     </motion.article>
   );
 }
-
 // ============================================================
 // EMPTY STATE
 // ============================================================
-
 function EmptyState() {
   return (
     <div className="flex min-h-[320px] flex-col items-center justify-center rounded-[24px] border border-dashed border-white/[0.12] px-6 text-center">
@@ -979,11 +879,9 @@ function EmptyState() {
         strokeWidth={1}
         className="mb-5 text-[#C7FF4D]"
       />
-
       <h3 className="text-2xl font-semibold tracking-tight text-white">
         Nothing here. Yet.
       </h3>
-
       <p className="mt-3 max-w-sm text-sm leading-6 text-white/45">
         This corner of the collection is waiting for its next
         big idea.
@@ -991,25 +889,20 @@ function EmptyState() {
     </div>
   );
 }
-
 // ============================================================
 // PROJECT GALLERY
 // ============================================================
-
 function ProjectGallery() {
   const [activeFilter, setActiveFilter] =
     useState<FilterId>("all");
-
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") {
       return ALL_PROJECTS;
     }
-
     return ALL_PROJECTS.filter(
       (project) => project.category === activeFilter
     );
   }, [activeFilter]);
-
   return (
     <section
       id="projects"
@@ -1029,12 +922,10 @@ function ProjectGallery() {
         <div>
           <div className="mb-5 flex items-center gap-3">
             <span className="h-px w-8 bg-[#C7FF4D]" />
-
             <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#C7FF4D]">
               The collection
             </span>
           </div>
-
           <h2 className="text-[clamp(2.5rem,5.5vw,5rem)] font-semibold leading-[0.95] tracking-[-0.075em] text-white">
             Made with
             <br />
@@ -1043,30 +934,25 @@ function ProjectGallery() {
             </span>
           </h2>
         </div>
-
         <p className="max-w-[350px] text-sm leading-7 text-white/45">
           Some were built for businesses. Some started as
           personal curiosities. All of them taught me
           something.
         </p>
       </motion.div>
-
       {/* Filters */}
       <div className="mb-10 flex flex-col gap-5 border-b border-white/[0.08] pb-8 sm:mb-12 sm:flex-row sm:items-center sm:justify-between">
         <ProjectFilters
           active={activeFilter}
           onChange={setActiveFilter}
         />
-
         <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/30">
           <span className="h-1.5 w-1.5 rounded-full bg-[#C7FF4D]" />
-
           Showing{" "}
           {String(filteredProjects.length).padStart(2, "0")}{" "}
           projects
         </div>
       </div>
-
       {/* Gallery */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -1097,7 +983,6 @@ function ProjectGallery() {
                 const large =
                   activeFilter === "all" &&
                   project.slug === "ionian-digital";
-
                 return (
                   <ProjectCard
                     key={project.slug}
@@ -1111,7 +996,6 @@ function ProjectGallery() {
           )}
         </motion.div>
       </AnimatePresence>
-
       {/* Gallery footer */}
       <div className="mt-14 flex flex-col gap-4 border-t border-white/[0.08] pt-7 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
@@ -1120,12 +1004,10 @@ function ProjectGallery() {
             strokeWidth={1.2}
             className="text-[#C7FF4D]"
           />
-
           <span className="text-xs text-white/40">
             End of the collection. Not the end of the ideas.
           </span>
         </div>
-
         <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/25">
           More in progress ↗
         </span>
@@ -1133,14 +1015,11 @@ function ProjectGallery() {
     </section>
   );
 }
-
 // ============================================================
 // BOTTOM CTA
 // ============================================================
-
 function WorkCTA() {
   const [hovered, setHovered] = useState(false);
-
   return (
     <section className="relative overflow-hidden border-t border-white/[0.08] bg-[#0E0E11]">
       <div
@@ -1150,7 +1029,6 @@ function WorkCTA() {
           background: "rgba(199,255,77,0.065)",
         }}
       />
-
       <div className="relative mx-auto max-w-[1500px] px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-36">
         <motion.div
           initial="hidden"
@@ -1163,12 +1041,10 @@ function WorkCTA() {
         >
           <div className="mb-8 flex items-center gap-3">
             <span className="h-2 w-2 rounded-full bg-[#C7FF4D]" />
-
             <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/45">
               Your turn
             </span>
           </div>
-
           <h2 className="max-w-[1000px] text-[clamp(3.5rem,9vw,9rem)] font-semibold leading-[0.9] tracking-[-0.085em] text-white">
             HAVE A
             <br />
@@ -1177,7 +1053,6 @@ function WorkCTA() {
             </span>
             <span className="text-[#C7FF4D]">?</span>
           </h2>
-
           <div className="mt-10 flex flex-col gap-8 sm:mt-14 sm:flex-row sm:items-end sm:justify-between">
             <p className="max-w-[420px] text-base leading-7 text-white/50">
               I like interesting problems, ambitious ideas,
@@ -1187,7 +1062,6 @@ function WorkCTA() {
                 Let&apos;s make something worth clicking.
               </span>
             </p>
-
             <Link
               href="/contact"
               onMouseEnter={() => setHovered(true)}
@@ -1195,7 +1069,6 @@ function WorkCTA() {
               className="group inline-flex w-fit min-h-14 items-center gap-5 rounded-full border border-[#C7FF4D] bg-[#C7FF4D] px-7 py-4 text-sm font-semibold text-[#09090B] transition-all duration-300 hover:bg-transparent hover:text-[#C7FF4D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C7FF4D] focus-visible:ring-offset-4 focus-visible:ring-offset-[#0E0E11]"
             >
               Let&apos;s talk
-
               <motion.span
                 animate={{
                   x: hovered ? 4 : 0,
@@ -1217,11 +1090,9 @@ function WorkCTA() {
     </section>
   );
 }
-
 // ============================================================
 // PAGE
 // ============================================================
-
 export default function WorkPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#09090B] text-white">
