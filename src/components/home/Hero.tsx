@@ -171,7 +171,7 @@ function InteractiveBeneath() {
           delay: isRevealed && !reduceMotion ? 0.35 : 0,
         }}
       >
-        curiosity looks good on you.
+        so nosy.
       </motion.span>
 
       {/* ACCESSIBLE ANNOUNCEMENT */}

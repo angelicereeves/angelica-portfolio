@@ -2,6 +2,7 @@
 
 import { FormEvent, useState, type CSSProperties } from "react";
 import { motion, useReducedMotion } from "motion/react";
+
 import {
   ArrowRight,
   ArrowUpRight,
@@ -65,14 +66,6 @@ const introductions: Record<Inquiry, string> = {
   hello: "No pitch required. I'd love to hear from you.",
 };
 
-const budgets = [
-  "Under €500",
-  "€500–€1,500",
-  "€1,500–€5,000",
-  "€5,000+",
-  "Not sure yet",
-];
-
 // ============================================================
 // CONTACT LINKS
 // ============================================================
@@ -133,7 +126,6 @@ export default function ContactContent() {
   const reducedMotion = useReducedMotion();
 
   const [inquiry, setInquiry] = useState<Inquiry>("project");
-  const [budget, setBudget] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -186,12 +178,6 @@ export default function ContactContent() {
 
     data.set("inquiry_type", inquiry);
 
-    if (inquiry === "project" && budget) {
-      data.set("project_budget", budget);
-    } else {
-      data.delete("project_budget");
-    }
-
     setStatus("sending");
     setErrorMessage("");
 
@@ -217,7 +203,6 @@ export default function ContactContent() {
       }
 
       form.reset();
-      setBudget("");
       setStatus("success");
     } catch (error) {
       setErrorMessage(
@@ -388,7 +373,7 @@ export default function ContactContent() {
                       {active && (
                         <Check
                           aria-hidden="true"
-                          className="absolute right-5 bottom-5 h-4 w-4"
+                          className="absolute bottom-5 right-5 h-4 w-4"
                           style={{ color: accent }}
                         />
                       )}
@@ -512,46 +497,6 @@ export default function ContactContent() {
                   />
                 </div>
 
-                {/* PROJECT BUDGET */}
-
-                {inquiry === "project" && (
-                  <div>
-                    <FieldLabel htmlFor="contact-budget">
-                      ESTIMATED BUDGET{" "}
-                      <span className="text-white/25">
-                        (OPTIONAL)
-                      </span>
-                    </FieldLabel>
-
-                    <select
-                      id="contact-budget"
-                      name="project_budget"
-                      value={budget}
-                      onChange={(event) =>
-                        setBudget(event.target.value)
-                      }
-                      className={`${fieldClass} appearance-none`}
-                    >
-                      <option
-                        value=""
-                        className="bg-[#111116]"
-                      >
-                        Select a range
-                      </option>
-
-                      {budgets.map((option) => (
-                        <option
-                          key={option}
-                          value={option}
-                          className="bg-[#111116]"
-                        >
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
                 {/* MESSAGE */}
 
                 <div>
@@ -661,10 +606,7 @@ export default function ContactContent() {
               RIGHT COLUMN: DIRECT CONTACT
           ================================================== */}
 
-          <motion.aside
-            {...reveal}
-            className="lg:pt-1"
-          >
+          <motion.aside {...reveal} className="lg:pt-1">
             <div className="sticky top-28 overflow-hidden rounded-[28px] border border-white/10 bg-[#111116] p-7 sm:p-9">
               <div className="mb-10 flex items-center justify-between">
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#A855F7]">
